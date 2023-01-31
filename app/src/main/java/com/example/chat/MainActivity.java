@@ -49,15 +49,6 @@ public class MainActivity extends AppCompatActivity {
         txtIPUser2 = findViewById(R.id.txtIpUser2);
         taMensajes = findViewById(R.id.taMensajes);
 
-        // Obtenemos la IP del router que servirá como servidor
-        /*try {
-            SERVER_IP = getRouterIpAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        // Mostramos la IP del servidor
-        txtIPServidor.setText(SERVER_IP);*/
-
         // Obtenemos la IP del usuario
         USER_IP = getUserIpAddress();
         // Mostramos la IP del usuario
@@ -178,17 +169,5 @@ public class MainActivity extends AppCompatActivity {
 
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
-
-    /**
-     *
-     * @return
-     * @throws UnknownHostException
-     */
-    private String getRouterIpAddress() throws UnknownHostException {
-        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-
-        return Formatter.formatIpAddress(wm.getDhcpInfo().gateway);
-    }
-
 
 }
