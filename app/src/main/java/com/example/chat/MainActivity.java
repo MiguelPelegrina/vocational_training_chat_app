@@ -2,7 +2,6 @@ package com.example.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -11,13 +10,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.chat.model.Paquete;
-import com.example.chat.model.SocketClient;
-import com.example.chat.model.SocketServer;
+import com.example.chat.model.ServerClient;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,15 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtIPUser2;
     private TextView taMensajes;
 
-    private Thread hiloCliente = null;
-    private Thread hiloServidor = null;
-    private Paquete paqueteCliente;
-    private Paquete paqueteServidor;
-
-    private SocketServer socketServer;
-    private SocketClient socketClient;
-
-    private Button btnList;
+    private ServerClient serverClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,55 +49,17 @@ public class MainActivity extends AppCompatActivity {
         // Mostramos la IP del usuario
         txtIpUser.setText(USER_IP);
 
-        socketServer = new SocketServer(this);
-        socketServer.runSocketServer(new Runnable() {
+        serverClient = new ServerClient(this);
+        serverClient.start(new Runnable() {
             @Override
-            public void run () {
-                Paquete paquete = socketServer.getPaquete();
+            public void run() {
+                Paquete paquete = serverClient.getPaquete();
                 taMensajes.append("\n" + paquete.getNombre() + ": " +
-                    paquete.getMensaje());
-                //+ " para " + paquete.getIp());
+                        paquete.getMensaje());
             }
         });
 
-        hiloCliente = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    // Nos creamos el canal del servidor del cliente para obtener los datos del
-                    // servidor
-                    ServerSocket servidor_cliente = new ServerSocket(SERVER_PORT);
-
-                    while(true){
-                        // Conectamos el canal
-                        Socket cliente = servidor_cliente.accept();
-                        // Obtenemos la información del canal a través de un flujo de datos
-                        ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
-                        // Casteamos el paquete recibido
-                        paqueteCliente = (Paquete) flujoentrada.readObject();
-                        // Modificamos los elementos gráficos
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                taMensajes.append("\n" + paqueteCliente.getNombre() + ": " + paqueteCliente.getMensaje());
-                            }
-                        });
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        hiloCliente.start();
-
-        /*socketClient = new SocketClient(this, new SocketServer(this),txtIPUser2.getText().toString());
-        socketClient.runSocketServer(new Runnable() {
-            @Override
-            public void run() {
-                taMensajes.append("\n" + paqueteCliente.getNombre() + ": " + paqueteCliente.getMensaje());
-            }
-        });*/
-
+        // TODO
         btnMandar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

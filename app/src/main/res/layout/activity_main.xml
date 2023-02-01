@@ -82,6 +82,7 @@
         android:id="@+id/taMensajes"
         android:layout_width="386dp"
         android:layout_height="276dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:text="Mensajes"
         app:layout_constraintBottom_toTopOf="@+id/txtMensaje"
         app:layout_constraintEnd_toEndOf="parent"

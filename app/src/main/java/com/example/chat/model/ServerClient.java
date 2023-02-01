@@ -10,26 +10,26 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class SocketServer {
+public class ServerClient {
     private final Handler handler;
     private Paquete paquete;
-    private ServerSocket serverSocket;
 
-    public SocketServer(Context context){
-        handler = new Handler(context.getMainLooper());
-        try {
-            this.serverSocket = new ServerSocket(SERVER_PORT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public ServerClient(Context context){
+        this.handler = new Handler(context.getMainLooper());
     }
 
-    public void runSocketServer(Runnable runnable) {
+    public void start(Runnable runnable){
+        startServer(runnable);
+        startClient(runnable);
+    }
+
+    private void startServer(Runnable runnable){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true){
-                    try {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
+                    while(true) {
                         // Conectamos el canal
                         Socket socket = serverSocket.accept();
                         // Obtenemos la información del canal a través de un flujo de datos
@@ -47,9 +47,36 @@ public class SocketServer {
                         enviaDestinatario.close();*/
                         // Cerramos el canal
                         socket.close();
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
                     }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void startClient(Runnable runnable){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    // Nos creamos el canal del servidor del cliente para obtener los datos del
+                    // servidor
+                    ServerSocket servidor_cliente = new ServerSocket(SERVER_PORT);
+
+                    while(true){
+                        // Conectamos el canal
+                        Socket cliente = servidor_cliente.accept();
+                        // Obtenemos la información del canal a través de un flujo de datos
+                        ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
+                        // Casteamos el paquete recibido
+                        paquete = (Paquete) flujoentrada.readObject();
+                        // Modificamos los elementos gráficos
+                        runOnUiThread(runnable);
+                        cliente.close();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         }).start();
@@ -60,6 +87,6 @@ public class SocketServer {
     }
 
     public Paquete getPaquete(){
-        return paquete;
+        return this.paquete;
     }
 }
