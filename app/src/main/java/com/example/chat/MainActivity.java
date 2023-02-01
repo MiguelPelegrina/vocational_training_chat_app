@@ -2,6 +2,7 @@ package com.example.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -9,14 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.chat.controller.ListActivity;
 import com.example.chat.model.Paquete;
+import com.example.chat.model.SocketClient;
+import com.example.chat.model.SocketServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
     //Variables de clase
@@ -37,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private Paquete paqueteCliente;
     private Paquete paqueteServidor;
 
+    private SocketServer socketServer;
+    private SocketClient socketClient;
+
+    private Button btnList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,52 +56,23 @@ public class MainActivity extends AppCompatActivity {
         txtIpUser = findViewById(R.id.txtIpUser);
         txtIPUser2 = findViewById(R.id.txtIpUser2);
         taMensajes = findViewById(R.id.taMensajes);
+        btnList = findViewById(R.id.btnList);
 
         // Obtenemos la IP del usuario
         USER_IP = getUserIpAddress();
         // Mostramos la IP del usuario
         txtIpUser.setText(USER_IP);
 
-        hiloServidor = new Thread(new Runnable() {
+        socketServer = new SocketServer(this);
+        socketServer.runSocketServer(new Runnable() {
             @Override
-            public void run() {
-                try {
-                    // Nos creamos el canal del servidor
-                    ServerSocket servidor = new ServerSocket(SERVER_PORT);
-
-                    while(true){
-                        // Conectamos el canal
-                        Socket socket = servidor.accept();
-                        // Obtenemos la información del canal a través de un flujo de datos
-                        ObjectInputStream paquete_datos = new ObjectInputStream(socket.getInputStream());
-                        // Casteamos el paquete recibido
-                        paqueteServidor = (Paquete) paquete_datos.readObject();
-                        // Modificamos los elementos gráficos
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                taMensajes.append("\n" + paqueteServidor.getNombre() + ": " +
-                                        paqueteServidor.getMensaje() + " para " +
-                                        paqueteServidor.getIp());
-                            }
-                        });
-                        // TODO Mandar desde el servidor un paquete de datos a otro usuario indicado
-                        // por el usuario
-                        /*Socket enviaDestinatario = new Socket(USERIPDIFERENTE???,SERVER_PORT);
-                        ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
-                        paqueteReenvio.writeObject(paquete_recibido);
-                        paqueteReenvio.close();
-                        enviaDestinatario.close();*/
-
-                        // Cerramos el canal
-                        socket.close();
-                    }
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
+            public void run () {
+                Paquete paquete = socketServer.getPaquete();
+                taMensajes.append("\n" + paquete.getNombre() + ": " +
+                    paquete.getMensaje());
+                //+ " para " + paquete.getIp());
             }
         });
-        hiloServidor.start();
 
         hiloCliente = new Thread(new Runnable() {
             @Override
@@ -125,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
         });
         hiloCliente.start();
 
+        /*socketClient = new SocketClient(this, new SocketServer(this),txtIPUser2.getText().toString());
+        socketClient.runSocketServer(new Runnable() {
+            @Override
+            public void run() {
+                taMensajes.append("\n" + paqueteCliente.getNombre() + ": " + paqueteCliente.getMensaje());
+            }
+        });*/
+
         btnMandar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(!txtMensaje.getText().toString().isEmpty()){
                             try {
+                                taMensajes.append("\nTú: " + txtMensaje.getText().toString());
                                 // Nos creamos un canal de conexión con el servidor
                                 Socket socket = new Socket(txtIPUser2.getText().toString(), SERVER_PORT);
                                 // Preparamos el objeto con la información antes de mandarlo por el canal
@@ -155,11 +143,19 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
+
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, ListActivity.class);
+                i.putExtra("ip", txtIPUser2.getText().toString());
+                i.putExtra("nombre", txtNombre.getText().toString());
+                startActivity(i);
+            }
+        });
     }
 
-
     //Métodos auxiliares
-
     /**
      *
      * @return
@@ -169,5 +165,4 @@ public class MainActivity extends AppCompatActivity {
 
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
-
 }
