@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.chat.controller.ListActivity;
 import com.example.chat.model.Paquete;
 import com.example.chat.model.SocketClient;
 import com.example.chat.model.SocketServer;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         txtIpUser = findViewById(R.id.txtIpUser);
         txtIPUser2 = findViewById(R.id.txtIpUser2);
         taMensajes = findViewById(R.id.taMensajes);
-        btnList = findViewById(R.id.btnList);
 
         // Obtenemos la IP del usuario
         USER_IP = getUserIpAddress();
@@ -141,16 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }).start();
-            }
-        });
-
-        btnList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ListActivity.class);
-                i.putExtra("ip", txtIPUser2.getText().toString());
-                i.putExtra("nombre", txtNombre.getText().toString());
-                startActivity(i);
             }
         });
     }

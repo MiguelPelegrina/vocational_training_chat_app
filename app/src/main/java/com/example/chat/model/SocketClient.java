@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SocketClient {
@@ -14,7 +15,7 @@ public class SocketClient {
     private SocketServer socketServer;
     private Socket socket;
 
-    public SocketClient(Context context, SocketServer socketServer, String ip){
+    public SocketClient(Context context, SocketServer socketServer,String ip){
         this.handler = new Handler(context.getMainLooper());
         this.socketServer = socketServer;
         try {
