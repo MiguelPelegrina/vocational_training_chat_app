@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.chat.model.Paquete;
-import com.example.chat.model.ServerClient;
+import com.example.chat.model.Connexion;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtIPUser2;
     private TextView taMensajes;
 
-    private ServerClient serverClient;
+    private Connexion connexion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
         // Mostramos la IP del usuario
         txtIpUser.setText(USER_IP);
 
-        serverClient = new ServerClient(this);
-        serverClient.start(new Runnable() {
+        connexion = new Connexion(this);
+        connexion.start(new Runnable() {
             @Override
             public void run() {
-                Paquete paquete = serverClient.getPaquete();
+                Paquete paquete = connexion.getPaquete();
                 taMensajes.append("\n" + paquete.getNombre() + ": " +
                         paquete.getMensaje());
             }
