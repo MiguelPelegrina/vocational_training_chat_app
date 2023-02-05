@@ -1,21 +1,19 @@
 package com.example.chat;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Paquete;
@@ -32,14 +30,12 @@ public class ConnectActivity extends AppCompatActivity {
     public static String OTHER_IP = "";
     public static String USER_NAME = "";
     public static final int SERVER_PORT = 1234;
-    public static final int SERVER_PORT_2 = 1235;
 
-    private Button btnConnect;
     private ImageButton btnSend;
     private TextView txtConection;
     private TextView txtName;
     private TextView txtIpSelf;
-    private TextView txtIPOther;
+    private TextView txtIpOther;
     private TextView txtMensaje;
 
     private Conection conection;
@@ -53,12 +49,11 @@ public class ConnectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
-        btnConnect = findViewById(R.id.btnConnect);
         btnSend = findViewById(R.id.btnSend);
         txtConection = findViewById(R.id.txtConection);
         txtName = findViewById(R.id.txtNombre);
         txtIpSelf = findViewById(R.id.txtIpSelf);
-        txtIPOther = findViewById(R.id.txtIpOther);
+        txtIpOther = findViewById(R.id.txtIpOther);
         txtMensaje = findViewById(R.id.txtMensaje);
 
         // Obtenemos la IP del usuario
@@ -66,7 +61,7 @@ public class ConnectActivity extends AppCompatActivity {
         // Mostramos la IP del usuario
         txtIpSelf.setText(USER_IP);
         // Rellenamos gran parte de la IP necesaria para conectar con otro usuario
-        txtIPOther.setText(USER_IP.substring(0, USER_IP.lastIndexOf(".") + 1));
+        txtIpOther.setText(USER_IP.substring(0, USER_IP.lastIndexOf(".") + 1));
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerAdapter = new RecyclerAdapter(listaPaquetes);
@@ -84,40 +79,28 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Paquete paquete = conection.getPaquete();
-                listaPaquetes.add(paquete);
+                listaPaquetes.add(0, paquete);
                 Log.d("paquete recibido actividad", paquete.getMensaje());
                 recyclerAdapter.notifyDataSetChanged();
                 scrollToBottom();
             }
         });
 
-        btnConnect.setOnClickListener(new View.OnClickListener() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            OTHER_IP = txtIPOther.getText().toString();
-                            // Nos creamos un canal de conexión con el servidor
-                            Socket socket = new Socket(OTHER_IP, SERVER_PORT);
-                            if (socket.isBound()) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        txtConection.setText("Conectado");
-                                    }
-                                });
-                            }
-                            // Cerramos el canal
-                            socket.close();
-                        } catch (IOException ex) {
-                                ex.printStackTrace();
-                        }
-                    }
-                }).start();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
             }
-        });
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                update();
+            }
+        };
+        txtIpOther.addTextChangedListener(textWatcher);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,8 +121,8 @@ public class ConnectActivity extends AppCompatActivity {
                                 ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
                                 // Escribimos el objeto
                                 paquete_datos.writeObject(datos);
-                                listaPaquetes.add(datos);
-                                Log.d("paquete mandado", datos.getMensaje());
+                                listaPaquetes.add(0, datos);
+                                Log.d("paquete mandado", OTHER_IP);
                                 // Cerramos el flujo y el canal
                                 paquete_datos.close();
                                 socket.close();
@@ -156,6 +139,37 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     //Métodos auxiliares
+    private void update() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtConection.setText("Sin conexión");
+                        }
+                    });
+                    OTHER_IP = txtIpOther.getText().toString();
+                    // Nos creamos un canal de conexión con el servidor
+                    Socket socket = new Socket(OTHER_IP, SERVER_PORT);
+                    if (socket.isBound()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtConection.setText("Conectado");
+                            }
+                        });
+                    }
+                    // Cerramos el canal
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     /**
      *
      */

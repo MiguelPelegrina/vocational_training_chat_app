@@ -1,6 +1,6 @@
 package com.example.chat.model;
 
-import static com.example.chat.ConnectActivity.SERVER_PORT_2;
+import static com.example.chat.ChatActivity.SERVER_PORT_2;
 
 import android.content.Context;
 import android.os.Handler;

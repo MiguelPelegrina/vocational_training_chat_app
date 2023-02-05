@@ -1,7 +1,6 @@
 package com.example.chat;
 
 import static com.example.chat.ConnectActivity.OTHER_IP;
-import static com.example.chat.ConnectActivity.SERVER_PORT_2;
 import static com.example.chat.ConnectActivity.USER_IP;
 import static com.example.chat.ConnectActivity.USER_NAME;
 
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -25,6 +23,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
+    public static final int SERVER_PORT_2 = 1235;
     // Declaración de variables
     private ImageButton btnSend;
     private TextView txtMensaje;

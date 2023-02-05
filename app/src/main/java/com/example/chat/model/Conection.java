@@ -27,7 +27,6 @@ public class Conection {
                     //
                     ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
                     while(true) {
-                        // TODO DIFERENCIAR ENTRE CONECTAR Y RECIBIR MENSAJES?
                         // Conectamos el canal
                         Socket socket = serverSocket.accept();
                         // Obtenemos la información del canal a través de un flujo de datos
