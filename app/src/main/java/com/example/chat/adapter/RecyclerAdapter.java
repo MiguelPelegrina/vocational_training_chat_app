@@ -34,6 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         if(paquete.getIp().equals(USER_IP)){
             tipoMensaje = PAQUETE_MANDADO;
         }
+
         return tipoMensaje;
     }
 

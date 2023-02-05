@@ -86,22 +86,6 @@ public class ConnectActivity extends AppCompatActivity {
             }
         });
 
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                update();
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                update();
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                update();
-            }
-        };
-        txtIpOther.addTextChangedListener(textWatcher);
-
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +94,7 @@ public class ConnectActivity extends AppCompatActivity {
                     public void run() {
                         if(!txtMensaje.getText().toString().isEmpty()){
                             try {
+                                OTHER_IP = txtIpOther.getText().toString();
                                 // Nos creamos un canal de conexión con el servidor
                                 Socket socket = new Socket(OTHER_IP, SERVER_PORT);
                                 // Preparamos el objeto con la información antes de mandarlo por el canal
@@ -122,7 +107,6 @@ public class ConnectActivity extends AppCompatActivity {
                                 // Escribimos el objeto
                                 paquete_datos.writeObject(datos);
                                 listaPaquetes.add(0, datos);
-                                Log.d("paquete mandado", OTHER_IP);
                                 // Cerramos el flujo y el canal
                                 paquete_datos.close();
                                 socket.close();
@@ -139,37 +123,6 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     //Métodos auxiliares
-    private void update() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtConection.setText("Sin conexión");
-                        }
-                    });
-                    OTHER_IP = txtIpOther.getText().toString();
-                    // Nos creamos un canal de conexión con el servidor
-                    Socket socket = new Socket(OTHER_IP, SERVER_PORT);
-                    if (socket.isBound()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                txtConection.setText("Conectado");
-                            }
-                        });
-                    }
-                    // Cerramos el canal
-                    socket.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
     /**
      *
      */
