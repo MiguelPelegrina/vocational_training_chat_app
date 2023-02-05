@@ -1,28 +1,25 @@
 package com.example.chat.model;
 
-import static com.example.chat.MainActivity.SERVER_PORT;
+import static com.example.chat.ConnectActivity.SERVER_PORT;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Connexion {
+public class Conection {
     private final Handler handler;
     private Paquete paquete;
 
-    public Connexion(Context context){
+    public Conection(Context context){
         this.handler = new Handler(context.getMainLooper());
     }
 
-    public void start(Runnable runnable){
-        startSocket(runnable);
-    }
-
-    private void startSocket(Runnable runnable){
+    public void startSocket(Runnable runnable){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -30,12 +27,14 @@ public class Connexion {
                     //
                     ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
                     while(true) {
+                        // TODO DIFERENCIAR ENTRE CONECTAR Y RECIBIR MENSAJES?
                         // Conectamos el canal
                         Socket socket = serverSocket.accept();
                         // Obtenemos la información del canal a través de un flujo de datos
                         ObjectInputStream flujo_entrada = new ObjectInputStream(socket.getInputStream());
                         // Casteamos el paquete recibido
                         paquete = (Paquete) flujo_entrada.readObject();
+                        Log.d("mensaje recibido clase", paquete.getMensaje());
                         // Modificamos los elementos gráficos
                         runOnUiThread(runnable);
                         //
@@ -49,11 +48,11 @@ public class Connexion {
         }).start();
     }
 
-    private void runOnUiThread(Runnable runnable){
-        handler.post(runnable);
-    }
-
     public Paquete getPaquete(){
         return this.paquete;
+    }
+
+    private void runOnUiThread(Runnable runnable){
+        handler.post(runnable);
     }
 }

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Chat</string>
+    <string name="conectar">Conectar</string>
+    <string name="name">Name</string>
+    <string name="ip">IP</string>
+    <string name="ip_del_usuario">IP del usuario</string>
+    <string name="nombre_del_usuario">Nombre del usuario</string>
+    <string name="mensajes">Mensajes</string>
+    <string name="mensaje">Mensaje</string>
+    <string name="tu_nombre">Tu nombre</string>
 </resources>
