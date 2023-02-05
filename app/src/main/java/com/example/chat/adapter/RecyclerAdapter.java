@@ -3,7 +3,6 @@ package com.example.chat.adapter;
 
 import static com.example.chat.ConnectActivity.USER_IP;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Paquete paquete = listaPaquetes.get(position);
-        Log.d("onbind", String.valueOf(holder.getItemViewType()));
         switch (holder.getItemViewType()){
             case PAQUETE_MANDADO:
                 ((RecyclerHolderSender)holder).tvMessage.setText(paquete.getMensaje());
