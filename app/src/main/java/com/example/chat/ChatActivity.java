@@ -57,9 +57,9 @@ public class ChatActivity extends AppCompatActivity {
         // Configuramos el layoutManager
         // Nos creamos un LayoutManager, en este caso linear
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        //
+        // Invertimos el orden en el que se muestran los elementos de la lista. Los primeros
+        // elementos se muestran al final del recyclerView
         layoutManager.setStackFromEnd(true);
-        //
         layoutManager.setReverseLayout(true);
         // Configuramos el recyclerView asignandole el adapter y el layoutManager
         recyclerView.setAdapter(recyclerAdapter);
@@ -72,6 +72,8 @@ public class ChatActivity extends AppCompatActivity {
         // Rellenamos gran parte de la IP necesaria para conectar con otro usuario
         txtIpOther.setText(USER_IP.substring(0, USER_IP.lastIndexOf(".") + 1));
 
+        // Establecemos nuestro socket para obtener paquetes de tal forma que cuando llegue un
+        // paquete nuevo se añada al recyclerView
         conection = new Conection(this);
         conection.startSocket(new Runnable() {
             @Override
@@ -79,7 +81,7 @@ public class ChatActivity extends AppCompatActivity {
                 Paquete paquete = conection.getPaquete();
                 listaPaquetes.add(0, paquete);
                 recyclerAdapter.notifyDataSetChanged();
-                //recyclerView.swapAdapter(recyclerAdapter,true);
+                //recyclerView.swapAdapter(recyclerAdapter, true);
                 //recyclerView.scrollBy(0,0);
                 scrollToBottom();
             }

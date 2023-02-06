@@ -11,9 +11,14 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Clase que gestiona las conexiones y nos permite recibir y mandar paquetes
+ */
 public class Conection {
     // Atributos de la instancia
     private final Handler handler;
+    // TODO ES NECESARIO TENER DOS PAQUETES, UNO PARA MANDAR Y OTRO PARA RECIBIR PORQUE PUEDE DAR
+    // PROBLEMAS CUANDO SE MANDAN DOS PAQUETES A LA VEZ?
     private Paquete paquete;
 
     /**
@@ -45,7 +50,7 @@ public class Conection {
                         paquete = (Paquete) flujo_entrada.readObject();
                         // Modificamos los elementos gráficos
                         runOnUiThread(runnable);
-                        //
+                        // Cerramos
                         flujo_entrada.close();
                         socket.close();
                     }
@@ -70,12 +75,12 @@ public class Conection {
                     Socket socket = new Socket(ipOther, SERVER_PORT);
                     if (socket.isBound()) {
                         // Abrimos un nuevos flujo de datos
-                        ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
+                        ObjectOutputStream flujo_salida = new ObjectOutputStream(socket.getOutputStream());
                         // Escribimos el objeto
-                        paquete_datos.writeObject(datos);
+                        flujo_salida.writeObject(datos);
                         runOnUiThread(runnable);
                         // Cerramos el flujo y el canal
-                        paquete_datos.close();
+                        flujo_salida.close();
                         socket.close();
                     }
                 } catch (IOException e) {
@@ -85,7 +90,7 @@ public class Conection {
     }
 
     /**
-     *
+     * Método encargado de devolver el paquete
      * @return
      */
     public Paquete getPaquete(){
