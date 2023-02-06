@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,8 +23,6 @@ import java.util.ArrayList;
 public class ChatActivity extends AppCompatActivity {
     //Declaración de variables
     public static String USER_IP = "";
-    public static String OTHER_IP = "";
-    public static String USER_NAME = "";
     public static final int SERVER_PORT = 1234;
 
     private ImageButton btnSend;
@@ -81,9 +81,22 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        txtIpOther.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
+            }
 
-        // TODO Textwatcher que cuando cambia la IP de una que está conectada a otro aún sin
-        // conectar cambie el texto de txtConection a "Sin conectar"
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                update();
+            }
+        });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +105,7 @@ public class ChatActivity extends AppCompatActivity {
                     // TODO Se podría informar al usuario con mayor precisión cuando solo el nombre
                     // o solo el mensaje están vacios
                     Paquete datos = new Paquete();
-                    datos.setNombre(USER_NAME);
+                    datos.setNombre(txtName.getText().toString());
                     datos.setIp(USER_IP);
                     datos.setIpOther(txtIpOther.getText().toString());
                     datos.setMensaje(txtMensaje.getText().toString());
@@ -116,6 +129,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //Métodos auxiliares
+    private void update() {
+        txtConection.setText("Sin conectar");
+    }
+
     /**
      *
      */

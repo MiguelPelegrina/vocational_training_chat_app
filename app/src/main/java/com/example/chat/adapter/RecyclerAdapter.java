@@ -67,7 +67,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
                 ((RecyclerHolderSender)holder).tvMessage.setText("A (" + paquete.getIpOther() + "):\n" + paquete.getMensaje());
                 break;
             case PAQUETE_RECIBIDO:
-                ((RecyclerHolderReceiver)holder).tvMessage.setText("De (" + paquete.getIp() + "):\n" +paquete.getMensaje());
+                ((RecyclerHolderReceiver)holder).tvMessage.setText("De " + paquete.getNombre() + " (" + paquete.getIp() + "):\n" +paquete.getMensaje());
                 break;
         }
     }
