@@ -51,21 +51,25 @@ public class Conection {
     }
 
     public void sendMessage(Paquete datos, String ipOther, Runnable runnable){
-        try {
-            Socket socket = new Socket(ipOther, SERVER_PORT);
-            if(socket.isBound()){
-                // Abrimos un nuevos flujo de datos
-                ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
-                // Escribimos el objeto
-                paquete_datos.writeObject(datos);
-                // Cerramos el flujo y el canal
-                paquete_datos.close();
-                socket.close();
-            }
-            runOnUiThread(runnable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Socket socket = new Socket(ipOther, SERVER_PORT);
+                    if (socket.isBound()) {
+                        // Abrimos un nuevos flujo de datos
+                        ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
+                        // Escribimos el objeto
+                        paquete_datos.writeObject(datos);
+                        // Cerramos el flujo y el canal
+                        paquete_datos.close();
+                        socket.close();
+                    }
+                    runOnUiThread(runnable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }}).start();
     }
 
     public Paquete getPaquete(){

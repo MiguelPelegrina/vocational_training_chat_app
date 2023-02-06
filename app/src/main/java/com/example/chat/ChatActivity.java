@@ -93,22 +93,17 @@ public class ChatActivity extends AppCompatActivity {
                 if(!txtMensaje.getText().toString().isEmpty() && !txtName.getText().toString().isEmpty()){
                     // TODO Se podría informar al usuario con mayor precisión cuando solo el nombre
                     // o solo el mensaje están vacios
-                    new Thread(new Runnable() {
+                    Paquete datos = new Paquete();
+                    datos.setNombre(USER_NAME);
+                    datos.setIp(USER_IP);
+                    datos.setMensaje(txtMensaje.getText().toString());
+                    conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
                         @Override
                         public void run() {
-                            Paquete datos = new Paquete();
-                            datos.setNombre(USER_NAME);
-                            datos.setIp(USER_IP);
-                            datos.setMensaje(txtMensaje.getText().toString());
-                            conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
-                                @Override
-                                public void run() {
-                                    txtConection.setText("Conectado");
-                                    listaPaquetes.add(0, datos);
-                                }
-                            });
+                            txtConection.setText("Conectado");
+                            listaPaquetes.add(0, datos);
                         }
-                    }).start();
+                    });
                     recyclerAdapter.notifyDataSetChanged();
                     scrollToBottom();
                     /*
