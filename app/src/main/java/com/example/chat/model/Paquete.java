@@ -3,7 +3,7 @@ package com.example.chat.model;
 import java.io.Serializable;
 
 public class Paquete implements Serializable {
-    private String nombre, ip, mensaje;
+    private String nombre, ip, ipOther, mensaje;
 
     public String getNombre() {
         return nombre;
@@ -11,6 +11,10 @@ public class Paquete implements Serializable {
 
     public String getIp() {
         return ip;
+    }
+
+    public String getIpOther() {
+        return ipOther;
     }
 
     public String getMensaje() {
@@ -23,6 +27,10 @@ public class Paquete implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public void setIpOther(String ipOther) {
+        this.ipOther = ipOther;
     }
 
     public void setMensaje(String mensaje) {

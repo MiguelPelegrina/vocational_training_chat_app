@@ -91,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
                     Paquete datos = new Paquete();
                     datos.setNombre(USER_NAME);
                     datos.setIp(USER_IP);
+                    datos.setIpOther(txtIpOther.getText().toString());
                     datos.setMensaje(txtMensaje.getText().toString());
                     conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
                         @Override
