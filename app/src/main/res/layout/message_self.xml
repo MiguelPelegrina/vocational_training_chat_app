@@ -10,6 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient"
+        android:paddingHorizontal="20px"
+        android:paddingVertical="20px"
         android:text="@string/mensaje"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

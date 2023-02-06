@@ -97,6 +97,14 @@ public class ConnectActivity extends AppCompatActivity {
                                 OTHER_IP = txtIpOther.getText().toString();
                                 // Nos creamos un canal de conexión con el servidor
                                 Socket socket = new Socket(OTHER_IP, SERVER_PORT);
+                                if(socket.isBound()){
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            txtConection.setText("Conectado");
+                                        }
+                                    });
+                                }
                                 // Preparamos el objeto con la información antes de mandarlo por el canal
                                 Paquete datos = new Paquete();
                                 datos.setNombre(USER_NAME);

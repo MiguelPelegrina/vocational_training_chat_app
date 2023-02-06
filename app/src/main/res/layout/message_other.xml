@@ -4,13 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/purple_200">
+    android:backgroundTint="@color/purple_200"
+    android:paddingStart="5px"
+    android:paddingLeft="5px"
+    android:paddingTop="5px"
+    android:paddingEnd="5px"
+    android:paddingRight="5px"
+    android:paddingBottom="5px">
 
     <TextView
         android:id="@+id/tvOtherMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:attr/colorPressedHighlight"
+        android:background="@drawable/shape"
+        android:paddingHorizontal="20px"
+        android:paddingVertical="20px"
         android:text="@string/mensaje"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
