@@ -75,9 +75,12 @@ public class ChatActivity extends AppCompatActivity {
                 Paquete paquete = conection.getPaquete();
                 listaPaquetes.add(0, paquete);
                 recyclerAdapter.notifyDataSetChanged();
+                //recyclerView.swapAdapter(recyclerAdapter,true);
+                //recyclerView.scrollBy(0,0);
                 scrollToBottom();
             }
         });
+
 
         // TODO Textwatcher que cuando cambia la IP de una que está conectada a otro aún sin
         // conectar cambie el texto de txtConection a "Sin conectar"
@@ -101,6 +104,8 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     });
                     recyclerAdapter.notifyDataSetChanged();
+                    //recyclerView.swapAdapter(recyclerAdapter,true);
+                    //recyclerView.scrollBy(0,0);
                     scrollToBottom();
                 }else{
                     Toast.makeText(ChatActivity.this,"Su nombre y el campo no pueden " +
