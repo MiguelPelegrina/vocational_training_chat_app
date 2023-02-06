@@ -12,13 +12,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Conection {
+    // Atributos de la instancia
     private final Handler handler;
     private Paquete paquete;
 
+    /**
+     * Constructor por parámetros
+     * @param context Obtenemos la actividad que llama a esta clase para poder instanciar un Handler
+     *                que posteriormente se encarga de modificar los elementos gráficos en la vista
+     */
     public Conection(Context context){
         this.handler = new Handler(context.getMainLooper());
     }
 
+    /**
+     * Método
+     * @param runnable
+     */
     public void startSocket(Runnable runnable){
         new Thread(new Runnable() {
             @Override
@@ -46,6 +56,12 @@ public class Conection {
         }).start();
     }
 
+    /**
+     *
+     * @param datos
+     * @param ipOther
+     * @param runnable
+     */
     public void sendMessage(Paquete datos, String ipOther, Runnable runnable){
         new Thread(new Runnable() {
             @Override
@@ -68,10 +84,18 @@ public class Conection {
             }}).start();
     }
 
+    /**
+     *
+     * @return
+     */
     public Paquete getPaquete(){
         return this.paquete;
     }
 
+    /**
+     *
+     * @param runnable
+     */
     private void runOnUiThread(Runnable runnable){
         handler.post(runnable);
     }
