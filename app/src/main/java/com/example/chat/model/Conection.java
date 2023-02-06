@@ -1,6 +1,6 @@
 package com.example.chat.model;
 
-import static com.example.chat.ConnectActivity.SERVER_PORT;
+import static com.example.chat.ChatActivity.SERVER_PORT;
 
 import android.content.Context;
 import android.os.Handler;
@@ -45,6 +45,10 @@ public class Conection {
                 }
             }
         }).start();
+    }
+
+    public void sendMessage(){
+
     }
 
     public Paquete getPaquete(){

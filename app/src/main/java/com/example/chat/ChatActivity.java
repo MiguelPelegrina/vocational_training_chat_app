@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Paquete;
@@ -24,7 +22,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ConnectActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
     //Declaración de variables
     public static String USER_IP = "";
     public static String OTHER_IP = "";
@@ -86,13 +84,19 @@ public class ConnectActivity extends AppCompatActivity {
             }
         });
 
+        // TODO Textwatcher que cuando cambia la IP de una que está conectada a otro aún sin
+        // conectar cambie el texto de txtConection a "Sin conectar"
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!txtMensaje.getText().toString().isEmpty()){
+                if(!txtMensaje.getText().toString().isEmpty() && !txtName.getText().toString().isEmpty()){
+                    // TODO Se podría informar al usuario con mayor precisión cuando solo el nombre
+                    // o solo el mensaje están vacios
+                    //conection.sendMessage();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
                             try {
                                 OTHER_IP = txtIpOther.getText().toString();
                                 // Nos creamos un canal de conexión con el servidor
@@ -122,10 +126,13 @@ public class ConnectActivity extends AppCompatActivity {
                                 ex.printStackTrace();
                             }
                         }
-                    }
-                }).start();
-                recyclerAdapter.notifyDataSetChanged();
-                scrollToBottom();
+                    }).start();
+                    recyclerAdapter.notifyDataSetChanged();
+                    scrollToBottom();
+                }else{
+                    Toast.makeText(ChatActivity.this,"Su nombre y el campo no pueden " +
+                            "estar vacios", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
