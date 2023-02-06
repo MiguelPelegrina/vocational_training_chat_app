@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -17,9 +16,6 @@ import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Paquete;
 import com.example.chat.model.Conection;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
@@ -78,7 +74,6 @@ public class ChatActivity extends AppCompatActivity {
             public void run() {
                 Paquete paquete = conection.getPaquete();
                 listaPaquetes.add(0, paquete);
-                Log.d("paquete recibido actividad", paquete.getMensaje());
                 recyclerAdapter.notifyDataSetChanged();
                 scrollToBottom();
             }
@@ -106,43 +101,6 @@ public class ChatActivity extends AppCompatActivity {
                     });
                     recyclerAdapter.notifyDataSetChanged();
                     scrollToBottom();
-                    /*
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                OTHER_IP = txtIpOther.getText().toString();
-                                // Nos creamos un canal de conexión con el servidor
-                                Socket socket = new Socket(OTHER_IP, SERVER_PORT);
-                                if(socket.isBound()){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            txtConection.setText("Conectado");
-                                        }
-                                    });
-                                    // TODO PONER AQUI LO POSTERIOR
-                                }
-                                // Preparamos el objeto con la información antes de mandarlo por el canal
-                                Paquete datos = new Paquete();
-                                datos.setNombre(USER_NAME);
-                                datos.setIp(USER_IP);
-                                datos.setMensaje(txtMensaje.getText().toString());
-                                // Abrimos un nuevos flujo de datos
-                                ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
-                                // Escribimos el objeto
-                                paquete_datos.writeObject(datos);
-                                listaPaquetes.add(0, datos);
-                                // Cerramos el flujo y el canal
-                                paquete_datos.close();
-                                socket.close();
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }).start();
-                    recyclerAdapter.notifyDataSetChanged();
-                    scrollToBottom();*/
                 }else{
                     Toast.makeText(ChatActivity.this,"Su nombre y el campo no pueden " +
                             "estar vacios", Toast.LENGTH_LONG).show();

@@ -4,9 +4,6 @@ import static com.example.chat.ChatActivity.SERVER_PORT;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
-
-import com.example.chat.R;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,7 +33,6 @@ public class Conection {
                         ObjectInputStream flujo_entrada = new ObjectInputStream(socket.getInputStream());
                         // Casteamos el paquete recibido
                         paquete = (Paquete) flujo_entrada.readObject();
-                        Log.d("mensaje recibido clase", paquete.getMensaje());
                         // Modificamos los elementos gráficos
                         runOnUiThread(runnable);
                         //
@@ -61,11 +57,11 @@ public class Conection {
                         ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
                         // Escribimos el objeto
                         paquete_datos.writeObject(datos);
+                        runOnUiThread(runnable);
                         // Cerramos el flujo y el canal
                         paquete_datos.close();
                         socket.close();
                     }
-                    runOnUiThread(runnable);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
