@@ -93,7 +93,25 @@ public class ChatActivity extends AppCompatActivity {
                 if(!txtMensaje.getText().toString().isEmpty() && !txtName.getText().toString().isEmpty()){
                     // TODO Se podría informar al usuario con mayor precisión cuando solo el nombre
                     // o solo el mensaje están vacios
-                    //conection.sendMessage();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Paquete datos = new Paquete();
+                            datos.setNombre(USER_NAME);
+                            datos.setIp(USER_IP);
+                            datos.setMensaje(txtMensaje.getText().toString());
+                            conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
+                                @Override
+                                public void run() {
+                                    txtConection.setText("Conectado");
+                                    listaPaquetes.add(0, datos);
+                                }
+                            });
+                        }
+                    }).start();
+                    recyclerAdapter.notifyDataSetChanged();
+                    scrollToBottom();
+                    /*
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -108,6 +126,7 @@ public class ChatActivity extends AppCompatActivity {
                                             txtConection.setText("Conectado");
                                         }
                                     });
+                                    // TODO PONER AQUI LO POSTERIOR
                                 }
                                 // Preparamos el objeto con la información antes de mandarlo por el canal
                                 Paquete datos = new Paquete();
@@ -128,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }).start();
                     recyclerAdapter.notifyDataSetChanged();
-                    scrollToBottom();
+                    scrollToBottom();*/
                 }else{
                     Toast.makeText(ChatActivity.this,"Su nombre y el campo no pueden " +
                             "estar vacios", Toast.LENGTH_LONG).show();

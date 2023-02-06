@@ -6,8 +6,11 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.chat.R;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -47,8 +50,22 @@ public class Conection {
         }).start();
     }
 
-    public void sendMessage(){
-
+    public void sendMessage(Paquete datos, String ipOther, Runnable runnable){
+        try {
+            Socket socket = new Socket(ipOther, SERVER_PORT);
+            if(socket.isBound()){
+                // Abrimos un nuevos flujo de datos
+                ObjectOutputStream paquete_datos = new ObjectOutputStream(socket.getOutputStream());
+                // Escribimos el objeto
+                paquete_datos.writeObject(datos);
+                // Cerramos el flujo y el canal
+                paquete_datos.close();
+                socket.close();
+            }
+            runOnUiThread(runnable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Paquete getPaquete(){
