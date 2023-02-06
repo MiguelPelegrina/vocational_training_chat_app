@@ -20,6 +20,7 @@ public class Conection {
     // TODO ES NECESARIO TENER DOS PAQUETES, UNO PARA MANDAR Y OTRO PARA RECIBIR PORQUE PUEDE DAR
     // PROBLEMAS CUANDO SE MANDAN DOS PAQUETES A LA VEZ?
     private Paquete paquete;
+    private boolean openSocket;
 
     /**
      * Constructor por parámetros
@@ -28,6 +29,7 @@ public class Conection {
      */
     public Conection(Context context){
         this.handler = new Handler(context.getMainLooper());
+        this.openSocket = true;
     }
 
     /**
@@ -41,7 +43,7 @@ public class Conection {
                 try {
                     //
                     ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
-                    while(true) {
+                    while(openSocket) {
                         // Conectamos el canal
                         Socket socket = serverSocket.accept();
                         // Obtenemos la información del canal a través de un flujo de datos
@@ -95,6 +97,10 @@ public class Conection {
      */
     public Paquete getPaquete(){
         return this.paquete;
+    }
+
+    public void setOpenSocket(boolean openSocket){
+        this.openSocket = openSocket;
     }
 
     /**
