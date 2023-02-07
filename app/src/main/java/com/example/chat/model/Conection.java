@@ -21,6 +21,7 @@ public class Conection {
     // PROBLEMAS CUANDO SE MANDAN DOS PAQUETES A LA VEZ?
     private Paquete paquete;
     private boolean openSocket;
+    private ServerSocket serverSocket;
 
     /**
      * Constructor por parámetros
@@ -42,7 +43,7 @@ public class Conection {
             public void run() {
                 try {
                     //
-                    ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
+                    serverSocket = new ServerSocket(SERVER_PORT);
                     while(openSocket) {
                         // Conectamos el canal
                         Socket socket = serverSocket.accept();
@@ -101,6 +102,11 @@ public class Conection {
 
     public void setSocketState(boolean openSocket){
         this.openSocket = openSocket;
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
