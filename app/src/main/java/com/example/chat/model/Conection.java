@@ -100,12 +100,26 @@ public class Conection {
         return this.paquete;
     }
 
+    // TODO en vez de set un close que cierre 100%
     public void setSocketState(boolean openSocket){
         this.openSocket = openSocket;
         try {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        /*if(openSocket){
+            openSocket = false;
+        }else{
+            openSocket = true;
+        }
+        try {
+            if(serverSocket.isClosed()){
+                serverSocket = new ServerSocket(SERVER_PORT);
+            }else{
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();*/
         }
     }
 

@@ -101,4 +101,33 @@ public class ChatActivity extends AppCompatActivity {
     private void scrollToBottom(){
         recyclerView.scrollToPosition(0);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        conection.setSocketState(false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        conection.setSocketState(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        conection.startSocket(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("socket", "segundo socket con misma ip");
+                Paquete paquete = conection.getPaquete();
+                listaPaquetes.add(0, paquete);
+                recyclerAdapter.notifyDataSetChanged();
+                //recyclerView.swapAdapter(recyclerAdapter, true);
+                //recyclerView.scrollBy(0,0);
+                scrollToBottom();
+            }
+        });
+    }
 }

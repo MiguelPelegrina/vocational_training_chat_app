@@ -20,7 +20,7 @@ import java.util.List;
  * Clase adaptadoras encargada de mostrar tanto los mensajes recibidos como los mandados por el
  * usuario de la aplicación
  */
-public class RecyclerAdapter extends RecyclerView.Adapter {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder> {
     // Atributos de la clase
     // Estos atributos nos sirven para identificar el tipo de paquete, es decir, si es uno mandado
     // o recibido, para posteriormente utilizar un XML u otro
@@ -66,7 +66,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
      */
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         RecyclerView.ViewHolder viewHolder = null;
 
@@ -81,7 +81,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
                 break;
         }
 
-        return viewHolder;
+        return (RecyclerHolder) viewHolder;
     }
 
     /**
@@ -91,7 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
      * @param position Position del elemento en la lista de elementos
      */
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         Paquete paquete = listaPaquetes.get(position);
         switch (holder.getItemViewType()){
             case PAQUETE_MANDADO:
@@ -112,15 +112,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         return listaPaquetes.size();
     }
 
-    // Clases internas
-    // TODO SERÍA MEJORAR CREARNOS UNA CLASE PADRE???
     /**
-     * Clase de tipo RecyclerHolder que extiende de ViewHolder. Corresponde a los mensajes mandados
+     *
      */
-    private class RecyclerHolderSender extends RecyclerView.ViewHolder{
+    protected class RecyclerHolder extends RecyclerView.ViewHolder{
         // Atributos de la clase
         TextView tvMessage;
 
+        public RecyclerHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    // Clases internas
+    /**
+     * Clase de tipo RecyclerHolder que extiende de ViewHolder. Corresponde a los mensajes mandados
+     */
+    private class RecyclerHolderSender extends RecyclerHolder{
         /**
          * Constructor por parámetro
          * @param itemView Vista del layout
@@ -135,10 +143,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     /**
      * Clase de tipo RecyclerHolder que extiende de ViewHolder. Corresponde a los mensajes recibidos
      */
-    private class RecyclerHolderReceiver extends RecyclerView.ViewHolder{
-        // Atributos de la clase
-        TextView tvMessage;
-
+    private class RecyclerHolderReceiver extends RecyclerHolder{
         /**
          * Constructor por parámetro
          * @param itemView Vista del layout

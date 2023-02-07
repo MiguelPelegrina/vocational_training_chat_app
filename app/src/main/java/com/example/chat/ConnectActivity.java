@@ -160,6 +160,26 @@ public class ConnectActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        conection.startSocket(new Runnable() {
+            @Override
+            public void run() {
+                Paquete paquete = conection.getPaquete();
+
+                // TODO
+                Toast.makeText(ConnectActivity.this,"ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
+
+                listaPaquetes.add(0, paquete);
+                recyclerAdapter.notifyDataSetChanged();
+                //recyclerView.swapAdapter(recyclerAdapter, true);
+                //recyclerView.scrollBy(0,0);
+                scrollToBottom();
+            }
+        });
+    }
+
     //Métodos auxiliares
     /**
      * Método encargado de modificar el estado de la conexión cada vez que se modifica la IP a la
