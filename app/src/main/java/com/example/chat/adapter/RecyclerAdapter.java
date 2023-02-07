@@ -1,7 +1,7 @@
 package com.example.chat.adapter;
 
 
-import static com.example.chat.ChatActivity.USER_IP;
+import static com.example.chat.ConnectActivity.USER_IP;
 
 import android.view.LayoutInflater;
 import android.view.View;

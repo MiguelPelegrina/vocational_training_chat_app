@@ -1,6 +1,6 @@
 package com.example.chat.model;
 
-import static com.example.chat.ChatActivity.SERVER_PORT;
+import static com.example.chat.ConnectActivity.SERVER_PORT;
 
 import android.content.Context;
 import android.os.Handler;
@@ -99,7 +99,7 @@ public class Conection {
         return this.paquete;
     }
 
-    public void setOpenSocket(boolean openSocket){
+    public void setSocketState(boolean openSocket){
         this.openSocket = openSocket;
     }
 
