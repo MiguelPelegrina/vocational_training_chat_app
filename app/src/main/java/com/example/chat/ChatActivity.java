@@ -76,7 +76,6 @@ public class ChatActivity extends AppCompatActivity {
         connection.startSocket(new Runnable() {
             @Override
             public void run() {
-                Log.d("socket", "segundo socket con misma ip");
                 Paquete paquete = connection.getPaquete();
                 listaPaquetes.add(0, paquete);
                 recyclerAdapter.notifyDataSetChanged();
@@ -93,10 +92,11 @@ public class ChatActivity extends AppCompatActivity {
                 connection.sendMessage(datos, intent.getStringExtra("ip"), new Runnable(){
                     @Override
                     public void run() {
-                            listaPaquetes.add(0, datos);
-                        }
+                        listaPaquetes.add(0, datos);
+                        recyclerAdapter.notifyDataSetChanged();
+                    }
                 });
-                recyclerAdapter.notifyDataSetChanged();
+
                 //recyclerView.swapAdapter(recyclerAdapter,true);
                 //recyclerView.scrollBy(0,0);
                 scrollToBottom();
