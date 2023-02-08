@@ -97,7 +97,13 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Paquete paquete = connection.getPaquete();
-                Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
+                String mensaje = "";
+                if(paquete.getIp().equals(USER_IP)){
+                    mensaje = "Ha connectado con " + txtIpOther.getText();
+                }else{
+                    mensaje = paquete.getIp() + " quiere conectarse contigo!";
+                }
+                Toast.makeText(ConnectActivity.this, mensaje, Toast.LENGTH_LONG).show();
             }
         });
     }
