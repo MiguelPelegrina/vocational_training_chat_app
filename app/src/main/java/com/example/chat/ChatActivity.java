@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -38,6 +40,21 @@ public class ChatActivity extends AppCompatActivity {
 
         btnSend = findViewById(R.id.ibSend);
         txtMensaje = findViewById(R.id.etMensaje);
+
+        txtMensaje.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                update();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                update();
+            }
+        });
 
         recyclerView = findViewById(R.id.recyclerViewChat);
         recyclerAdapter = new RecyclerAdapter(listaPaquetes);
@@ -72,33 +89,19 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!txtMensaje.getText().toString().isEmpty()){
-                    Paquete datos = new Paquete(intent.getStringExtra("nombre"), USER_IP, intent.getStringExtra("ip"), txtMensaje.getText().toString());
-                    connection.sendMessage(datos, intent.getStringExtra("ip"), new Runnable(){
-                        @Override
-                        public void run() {
+                Paquete datos = new Paquete(intent.getStringExtra("nombre"), USER_IP, intent.getStringExtra("ip"), txtMensaje.getText().toString());
+                connection.sendMessage(datos, intent.getStringExtra("ip"), new Runnable(){
+                    @Override
+                    public void run() {
                             listaPaquetes.add(0, datos);
                         }
-                    });
-                    recyclerAdapter.notifyDataSetChanged();
-                    //recyclerView.swapAdapter(recyclerAdapter,true);
-                    //recyclerView.scrollBy(0,0);
-                    scrollToBottom();
-                }else{
-                    Toast.makeText(ChatActivity.this,"Debe introducir un mensaje",
-                            Toast.LENGTH_LONG).show();
-                }
+                });
+                recyclerAdapter.notifyDataSetChanged();
+                //recyclerView.swapAdapter(recyclerAdapter,true);
+                //recyclerView.scrollBy(0,0);
+                scrollToBottom();
             }
         });
-    }
-
-    /**
-     * Método encargado de desplazarse a la "primera" posición del RecyclerView. Si se invierte el
-     * orden con el método setReverseLayout() del LayoutManager el usuario no tiene que "bajar" de
-     * forma manual para ver los mensajes más recientes.
-     */
-    private void scrollToBottom(){
-        recyclerView.scrollToPosition(0);
     }
 
     @Override
@@ -127,6 +130,24 @@ public class ChatActivity extends AppCompatActivity {
                 scrollToBottom();
             }
         });
+    }
+
+    /**
+     * Método encargado de desplazarse a la "primera" posición del RecyclerView. Si se invierte el
+     * orden con el método setReverseLayout() del LayoutManager el usuario no tiene que "bajar" de
+     * forma manual para ver los mensajes más recientes.
+     */
+    private void scrollToBottom(){
+        recyclerView.scrollToPosition(0);
+    }
+
+    private void update() {
+        if(txtMensaje.getText().toString().isEmpty()){
+            btnSend.setVisibility(View.INVISIBLE);
+        }else{
+            btnSend.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void connectSocket(){
