@@ -111,6 +111,8 @@ public class ChatActivity extends AppCompatActivity {
                         // Modificamos los elementos de la vista
                         listaPaquetes.add(0, datos);
                         recyclerAdapter.notifyDataSetChanged();
+                        // Vaciamos el campo de texto del mensaje, ya que ya se ha mandado
+                        txtMensaje.setText("");
                     }
                 });
                 scrollToBottom();
