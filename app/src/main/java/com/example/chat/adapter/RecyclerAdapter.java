@@ -68,7 +68,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerHolder viewHolder = null;
 
         switch (viewType) {
             case PAQUETE_MANDADO:
@@ -81,7 +81,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 break;
         }
 
-        return (RecyclerHolder) viewHolder;
+        return viewHolder;
     }
 
     /**
@@ -113,7 +113,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     }
 
     /**
-     *
+     * Clase padre de los dos tipos de RecyclerHolder que se utilizan para diferenciar los mensajes
+     * de los usuarios
      */
     protected class RecyclerHolder extends RecyclerView.ViewHolder{
         // Atributos de la clase

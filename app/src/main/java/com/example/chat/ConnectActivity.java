@@ -32,7 +32,6 @@ public class ConnectActivity extends AppCompatActivity {
     private TextView txtName;
     private TextView txtIpSelf;
     private TextView txtIpOther;
-    private TextView txtMensaje;
 
     private Conection conection;
 
@@ -69,12 +68,11 @@ public class ConnectActivity extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
-                Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "");
+                Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "Me he conectado a la conversación");
                 conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
                     @Override
                     public void run() {
-                        Toast.makeText(ConnectActivity.this,"ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
                         Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
                         conection.setSocketState(false);
                         i.putExtra("nombre", txtName.getText().toString());
@@ -93,7 +91,6 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Paquete paquete = conection.getPaquete();
-                // TODO
                 Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
             }
         });
