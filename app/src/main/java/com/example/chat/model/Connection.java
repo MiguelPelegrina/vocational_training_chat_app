@@ -4,6 +4,9 @@ import static com.example.chat.ConnectActivity.SERVER_PORT;
 
 import android.content.Context;
 import android.os.Handler;
+import android.widget.Toast;
+
+import com.example.chat.ConnectActivity;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +17,7 @@ import java.net.Socket;
 /**
  * Clase que gestiona las conexiones y nos permite recibir y mandar paquetes
  */
-public class Conection {
+public class Connection {
     // Atributos de la instancia
     private final Handler handler;
     // TODO ES NECESARIO TENER DOS PAQUETES, UNO PARA MANDAR Y OTRO PARA RECIBIR PORQUE PUEDE DAR
@@ -28,7 +31,7 @@ public class Conection {
      * @param context Obtenemos la actividad que llama a esta clase para poder instanciar un Handler
      *                que posteriormente se encarga de modificar los elementos gráficos en la vista
      */
-    public Conection(Context context){
+    public Connection(Context context){
         this.handler = new Handler(context.getMainLooper());
         this.openSocket = true;
     }

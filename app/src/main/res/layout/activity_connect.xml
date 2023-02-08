@@ -60,8 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient"
-        android:paddingHorizontal="5px"
-        android:paddingVertical="5px"
+        android:paddingHorizontal="10px"
+        android:paddingVertical="10px"
         android:text="@string/ip_del_usuario"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -93,12 +93,12 @@
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <TextView
-        android:id="@+id/tvIpUser2"
+        android:id="@+id/tvIpOther"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape"
-        android:paddingHorizontal="5px"
-        android:paddingVertical="5px"
+        android:paddingHorizontal="10px"
+        android:paddingVertical="10px"
         android:text="IP de otro usuario"
         android:textAlignment="center"
         android:textColor="@color/black"

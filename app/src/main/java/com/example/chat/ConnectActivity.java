@@ -1,26 +1,18 @@
 package com.example.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Paquete;
-import com.example.chat.model.Conection;
-
-import java.util.ArrayList;
+import com.example.chat.model.Connection;
 
 public class ConnectActivity extends AppCompatActivity {
     // Declaración de variables
@@ -33,7 +25,7 @@ public class ConnectActivity extends AppCompatActivity {
     private TextView txtIpSelf;
     private TextView txtIpOther;
 
-    private Conection conection;
+    private Connection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +47,11 @@ public class ConnectActivity extends AppCompatActivity {
 
         // Establecemos nuestro socket para obtener paquetes de tal forma que cuando llegue un
         // paquete nuevo se añada al recyclerView
-        conection = new Conection(this);
-        conection.startSocket(new Runnable() {
+        connection = new Connection(this);
+        connection.startSocket(new Runnable() {
             @Override
             public void run() {
-                Paquete paquete = conection.getPaquete();
+                Paquete paquete = connection.getPaquete();
                 // TODO
                 Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
             }
@@ -68,18 +60,22 @@ public class ConnectActivity extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "Me he conectado a la conversación");
-                conection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
-                    @Override
-                    public void run() {
-                        Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
-                        Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
-                        conection.setSocketState(false);
-                        i.putExtra("nombre", txtName.getText().toString());
-                        i.putExtra("ip", txtIpOther.getText().toString());
-                        startActivity(i);
-                    }
-                });
+                if(!txtName.getText().toString().isEmpty()){
+                    Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "Me he conectado a la conversación!");
+                    connection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
+                        @Override
+                        public void run() {
+                            Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
+                            connection.setSocketState(false);
+                            i.putExtra("nombre", txtName.getText().toString());
+                            i.putExtra("ip", txtIpOther.getText().toString());
+                            startActivity(i);
+                        }
+                    });
+                }else{
+                    Toast.makeText(ConnectActivity.this,"Debe introducir un nombre", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -87,10 +83,10 @@ public class ConnectActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        conection.startSocket(new Runnable() {
+        connection.startSocket(new Runnable() {
             @Override
             public void run() {
-                Paquete paquete = conection.getPaquete();
+                Paquete paquete = connection.getPaquete();
                 Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
             }
         });

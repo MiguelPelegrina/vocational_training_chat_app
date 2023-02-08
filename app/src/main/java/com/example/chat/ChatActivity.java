@@ -12,11 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chat.adapter.RecyclerAdapter;
-import com.example.chat.model.Conection;
+import com.example.chat.model.Connection;
 import com.example.chat.model.Paquete;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 public class ChatActivity extends AppCompatActivity {
     private ImageButton btnSend;
     private EditText txtMensaje;
-    private Conection conection;
+    private Connection connection;
 
     private ArrayList<Paquete> listaPaquetes = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -56,12 +55,12 @@ public class ChatActivity extends AppCompatActivity {
 
         intent = getIntent();
 
-        conection = new Conection(this);
-        conection.startSocket(new Runnable() {
+        connection = new Connection(this);
+        connection.startSocket(new Runnable() {
             @Override
             public void run() {
                 Log.d("socket", "segundo socket con misma ip");
-                Paquete paquete = conection.getPaquete();
+                Paquete paquete = connection.getPaquete();
                 listaPaquetes.add(0, paquete);
                 recyclerAdapter.notifyDataSetChanged();
                 //recyclerView.swapAdapter(recyclerAdapter, true);
@@ -75,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!txtMensaje.getText().toString().isEmpty()){
                     Paquete datos = new Paquete(intent.getStringExtra("nombre"), USER_IP, intent.getStringExtra("ip"), txtMensaje.getText().toString());
-                    conection.sendMessage(datos, intent.getStringExtra("ip"), new Runnable(){
+                    connection.sendMessage(datos, intent.getStringExtra("ip"), new Runnable(){
                         @Override
                         public void run() {
                             listaPaquetes.add(0, datos);
@@ -105,23 +104,22 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        conection.setSocketState(false);
+        connection.setSocketState(false);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        conection.setSocketState(false);
+        connection.setSocketState(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        conection.startSocket(new Runnable() {
+        connection.startSocket(new Runnable() {
             @Override
             public void run() {
-                Log.d("socket", "segundo socket con misma ip");
-                Paquete paquete = conection.getPaquete();
+                Paquete paquete = connection.getPaquete();
                 listaPaquetes.add(0, paquete);
                 recyclerAdapter.notifyDataSetChanged();
                 //recyclerView.swapAdapter(recyclerAdapter, true);
