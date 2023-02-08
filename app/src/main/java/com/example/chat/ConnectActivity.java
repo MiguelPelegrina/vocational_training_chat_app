@@ -59,15 +59,16 @@ public class ConnectActivity extends AppCompatActivity {
                 // Comprobamos que el nombre no esté vacio
                 if(!txtName.getText().toString().isEmpty()){
                     // Preparamos el paquete que queremos a mandar
-                    Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "Me he conectado a la conversación!");
+                    Paquete datos = new Paquete(txtName.getText().toString(), USER_IP,
+                            txtIpOther.getText().toString(), txtName.getText() +
+                            " se ha conectado a la conversación!");
                     // Mandamos el mensaje
                     connection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
                         @Override
                         public void run() {
-                            //Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
                             Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
                             // Cerramos el socket
-                            connection.setSocketState();
+                            //connection.closeSocket();
                             // Pasamos la información del mensaje mandado
                             i.putExtra("nombre", txtName.getText().toString());
                             i.putExtra("ip", txtIpOther.getText().toString());
@@ -82,18 +83,17 @@ public class ConnectActivity extends AppCompatActivity {
         });
     }
 
-    // TODO COMPROBAR
-    /*@Override
+    @Override
     protected void onStop() {
         super.onStop();
-        connection.setSocketState();
+        connection.closeSocket();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        connection.setSocketState();
-    }*/
+        connection.closeSocket();
+    }
 
     // Cuando volvemos a abrir la aplicación nos volvemos a conectar el socket
     @Override

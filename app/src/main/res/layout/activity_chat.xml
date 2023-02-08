@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_chat"
     tools:context=".ChatActivity">
 
     <androidx.constraintlayout.widget.Guideline
@@ -35,10 +36,13 @@
         android:id="@+id/etMensaje"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_borders"
         android:ems="10"
         android:hint="@string/mensaje"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"

@@ -31,8 +31,7 @@ public class Connection {
     public Connection(Context context){
         // Instanciamo el handler y abrimos el socket
         this.handler = new Handler(context.getMainLooper());
-        // TODO CAMBIARLO AL STARTSOCKET Y PROBARLO
-        this.socketStateOpen = true;
+        //this.socketStateOpen = true;
     }
 
     /**
@@ -47,6 +46,7 @@ public class Connection {
             @Override
             public void run() {
                 try {
+                    socketStateOpen = true;
                     // Instanciamos el ServerSocket
                     serverSocket = new ServerSocket(SERVER_PORT);
                     // Mientras que el estado de apertura del socket sea verdadero, es decir,
@@ -115,9 +115,8 @@ public class Connection {
      * Método encargado para abrir el estado del socket a abierto, es decir, ponemos el semáforo
      * en verde y cerramos el serverSocket
      */
-    public void setSocketState(){
+    public void closeSocket(){
         this.socketStateOpen = false;
-        // this.socketStateOpen = openSocket;
         try {
             serverSocket.close();
         } catch (IOException e) {

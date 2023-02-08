@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/connection"
+    android:background="@drawable/background_connect"
     tools:context=".ConnectActivity">
 
     <EditText
@@ -60,8 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient"
-        android:paddingHorizontal="10px"
-        android:paddingVertical="10px"
+        android:paddingHorizontal="15px"
+        android:paddingVertical="15px"
         android:text="@string/ip_del_usuario"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -97,8 +97,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape"
-        android:paddingHorizontal="10px"
-        android:paddingVertical="10px"
+        android:paddingHorizontal="15px"
+        android:paddingVertical="15px"
         android:text="IP de otro usuario"
         android:textAlignment="center"
         android:textColor="@color/black"

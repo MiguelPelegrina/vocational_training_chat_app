@@ -2,6 +2,7 @@ package com.example.chat;
 
 import static com.example.chat.ConnectActivity.USER_IP;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,11 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Connection;
@@ -44,6 +43,11 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.ibSend);
         txtMensaje = findViewById(R.id.etMensaje);
         intent = getIntent();
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(intent.getStringExtra("nombre"));
+        }
 
         // Asignamos un oyente para registrar los cambios en el campo de texto de mensaje de tal
         // forma que si está vacío, el botón de mandar mensajes no es visible, pero en cuanto tenga
@@ -119,13 +123,13 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        connection.setSocketState();
+        connection.closeSocket();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        connection.setSocketState();
+        connection.closeSocket();
     }
 
     // Cuando volvemos a esta actividad reiniciamos la conexión de tal forma que se vuelven a recibir

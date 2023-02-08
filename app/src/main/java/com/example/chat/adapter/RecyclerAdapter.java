@@ -95,10 +95,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         Paquete paquete = listaPaquetes.get(position);
         switch (holder.getItemViewType()){
             case PAQUETE_MANDADO:
-                ((RecyclerHolderSender)holder).tvMessage.setText("A (" + paquete.getIpOther() + "):\n" + paquete.getMensaje());
+                ((RecyclerHolderSender)holder).tvMessage.setText(paquete.getMensaje());
                 break;
             case PAQUETE_RECIBIDO:
-                ((RecyclerHolderReceiver)holder).tvMessage.setText("De " + paquete.getNombre() + " (" + paquete.getIp() + "):\n" +paquete.getMensaje());
+                ((RecyclerHolderReceiver)holder).tvMessage.setText(paquete.getMensaje());
                 break;
         }
     }
