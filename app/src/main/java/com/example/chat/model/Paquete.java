@@ -3,7 +3,7 @@ package com.example.chat.model;
 import java.io.Serializable;
 
 /**
- *
+ * Clase que encapsula el contenido que se va mandar a otro usuario
  */
 public class Paquete implements Serializable {
     // Atributos de la instancia

@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.chat.model.Paquete;
 import com.example.chat.model.Connection;
 
+/**
+ * Actividad encargada de establecer la conexión inicial con otro usuario
+ */
 public class ConnectActivity extends AppCompatActivity {
     // Declaración de variables
     // Variables de clase
@@ -24,7 +27,6 @@ public class ConnectActivity extends AppCompatActivity {
     private TextView txtName;
     private TextView txtIpSelf;
     private TextView txtIpOther;
-
     private Connection connection;
 
     @Override
@@ -50,19 +52,26 @@ public class ConnectActivity extends AppCompatActivity {
         connection = new Connection(this);
         connectSocket();
 
+        // Implementamos un oyente para conectar con otro usuario
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Comprobamos que el nombre no esté vacio
                 if(!txtName.getText().toString().isEmpty()){
+                    // Preparamos el paquete que queremos a mandar
                     Paquete datos = new Paquete(txtName.getText().toString(), USER_IP, txtIpOther.getText().toString(), "Me he conectado a la conversación!");
+                    // Mandamos el mensaje
                     connection.sendMessage(datos, txtIpOther.getText().toString(), new Runnable(){
                         @Override
                         public void run() {
-                            Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(ConnectActivity.this,"Ha connectado con " + datos.getIpOther(), Toast.LENGTH_LONG).show();
                             Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
-                            connection.setSocketState(false);
+                            // Cerramos el socket
+                            connection.setSocketState();
+                            // Pasamos la información del mensaje mandado
                             i.putExtra("nombre", txtName.getText().toString());
                             i.putExtra("ip", txtIpOther.getText().toString());
+                            // Nos cambiamos a la actividad de la conversación
                             startActivity(i);
                         }
                     });
@@ -73,6 +82,20 @@ public class ConnectActivity extends AppCompatActivity {
         });
     }
 
+    // TODO COMPROBAR
+    /*@Override
+    protected void onStop() {
+        super.onStop();
+        connection.setSocketState();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        connection.setSocketState();
+    }*/
+
+    // Cuando volvemos a abrir la aplicación nos volvemos a conectar el socket
     @Override
     protected void onResume() {
         super.onResume();
@@ -92,16 +115,23 @@ public class ConnectActivity extends AppCompatActivity {
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 
+    /**
+     * Método encargado de conectarse otro socket, mandando un mensaje de tal forma que informa al
+     * usuario de que otro quiero conectarse con el y ofreciendo la información para poder
+     * conectarse
+     */
     private void connectSocket(){
         connection.startSocket(new Runnable() {
             @Override
             public void run() {
                 Paquete paquete = connection.getPaquete();
                 String mensaje = "";
+                // Si el usuario manda el paquete se avisa que se ha conectado
                 if(paquete.getIp().equals(USER_IP)){
                     mensaje = "Ha connectado con " + txtIpOther.getText();
                 }else{
-                    mensaje = paquete.getIp() + " quiere conectarse contigo!";
+                    // Si el usuario que manda el mensaje es otro
+                    mensaje = paquete.getNombre() + " con la IP " + paquete.getIp() + " quiere conectarse contigo!";
                 }
                 Toast.makeText(ConnectActivity.this, mensaje, Toast.LENGTH_LONG).show();
             }
