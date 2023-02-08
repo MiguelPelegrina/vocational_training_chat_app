@@ -128,4 +128,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void connectSocket(){
+
+    }
 }

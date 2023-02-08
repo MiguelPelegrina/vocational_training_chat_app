@@ -110,19 +110,6 @@ public class Connection {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        /*if(openSocket){
-            openSocket = false;
-        }else{
-            openSocket = true;
-        }
-        try {
-            if(serverSocket.isClosed()){
-                serverSocket = new ServerSocket(SERVER_PORT);
-            }else{
-                serverSocket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();*/
         }
     }
 

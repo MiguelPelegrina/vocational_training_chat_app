@@ -48,14 +48,7 @@ public class ConnectActivity extends AppCompatActivity {
         // Establecemos nuestro socket para obtener paquetes de tal forma que cuando llegue un
         // paquete nuevo se añada al recyclerView
         connection = new Connection(this);
-        connection.startSocket(new Runnable() {
-            @Override
-            public void run() {
-                Paquete paquete = connection.getPaquete();
-                // TODO
-                Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
-            }
-        });
+        connectSocket();
 
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +76,9 @@ public class ConnectActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        connection.startSocket(new Runnable() {
-            @Override
-            public void run() {
-                Paquete paquete = connection.getPaquete();
-                Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
-            }
-        });
+        if(connection != null){
+            connectSocket();
+        }
     }
 
     //Métodos auxiliares
@@ -101,5 +90,15 @@ public class ConnectActivity extends AppCompatActivity {
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
 
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+    }
+
+    private void connectSocket(){
+        connection.startSocket(new Runnable() {
+            @Override
+            public void run() {
+                Paquete paquete = connection.getPaquete();
+                Toast.makeText(ConnectActivity.this,"Ha connectado con " + paquete.getIpOther(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
