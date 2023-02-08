@@ -18,6 +18,7 @@
         android:id="@+id/ibSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#E3A5A5"
         android:src="@android:drawable/ic_menu_send"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
