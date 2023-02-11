@@ -57,7 +57,7 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Comprobamos que el nombre no esté vacio
-                if(!txtName.getText().toString().isEmpty()){
+                if(!txtName.getText().toString().trim().isEmpty()){
                     // Preparamos el paquete que queremos a mandar
                     Paquete datos = new Paquete(txtName.getText().toString(), USER_IP,
                             txtIpOther.getText().toString(), txtName.getText() +

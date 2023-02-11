@@ -29,9 +29,8 @@ public class Connection {
      *                que posteriormente se encarga de modificar los elementos gráficos en la vista
      */
     public Connection(Context context){
-        // Instanciamo el handler y abrimos el socket
+        // Instanciamos el handler
         this.handler = new Handler(context.getMainLooper());
-        //this.socketStateOpen = true;
     }
 
     /**
@@ -46,6 +45,7 @@ public class Connection {
             @Override
             public void run() {
                 try {
+                    // Abrimos el socket
                     socketStateOpen = true;
                     // Instanciamos el ServerSocket
                     serverSocket = new ServerSocket(SERVER_PORT);
@@ -64,6 +64,7 @@ public class Connection {
                         flujo_entrada.close();
                         socket.close();
                     }
+
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
