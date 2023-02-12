@@ -119,7 +119,10 @@ public class Connection {
     public void closeSocket(){
         this.socketStateOpen = false;
         try {
-            serverSocket.close();
+            if(serverSocket != null){
+                serverSocket.close();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -13,6 +13,7 @@
         android:paddingHorizontal="20px"
         android:paddingVertical="20px"
         android:text="@string/mensaje"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

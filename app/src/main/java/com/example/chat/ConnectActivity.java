@@ -1,11 +1,19 @@
 package com.example.chat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.format.Formatter;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,9 +36,20 @@ public class ConnectActivity extends AppCompatActivity {
     private TextView txtIpSelf;
     private TextView txtIpOther;
     private Connection connection;
+    private SharedPreferences themePreferences;
+    private boolean nightTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Obtenemos las preferencias encargadas de guardar el tema elegido
+        themePreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nightTheme = themePreferences.getBoolean("nightTheme", false);
+        // Modificamos el tema
+        if(nightTheme){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
@@ -82,15 +101,50 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        connection.closeSocket();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Usamos un inflater para construir la vista pasandole el menu por defecto como parámetro
+        // para colocarlo en la vista
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // Sobrescribimos el metodo onOptionsItemSelected para manejar las diferentes opciones del menu
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            // Si queremos modificar las preferencias
+            case R.id.switch_theme:
+                // Modificamos el tema
+                if(nightTheme){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    themePreferences.edit().putBoolean("nightTheme", false).apply();
+                }else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    themePreferences.edit().putBoolean("nightTheme", true).apply();
+                }
+                // Recreamos la vista
+                recreate();
+                break;
+        }
+
+        return true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        connection.closeSocket();
+        if(connection != null){
+            connection.closeSocket();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(connection != null){
+            connection.closeSocket();
+        }
     }
 
     // Cuando volvemos a abrir la aplicación nos volvemos a conectar el socket

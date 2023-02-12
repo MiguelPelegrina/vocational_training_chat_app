@@ -2,18 +2,25 @@ package com.example.chat;
 
 import static com.example.chat.ConnectActivity.USER_IP;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
 
 import com.example.chat.adapter.RecyclerAdapter;
 import com.example.chat.model.Connection;
@@ -123,15 +130,19 @@ public class ChatActivity extends AppCompatActivity {
     // Controlamos que el socket que recibe los mensajes se cierra al cerrar la aplicación y al
     // cambiar de una actividad a otra
     @Override
-    protected void onStop() {
-        super.onStop();
-        connection.closeSocket();
+    protected void onPause() {
+        super.onPause();
+        if(connection != null){
+            connection.closeSocket();
+        }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        connection.closeSocket();
+    protected void onStop() {
+        super.onStop();
+        if(connection != null){
+            connection.closeSocket();
+        }
     }
 
     // Cuando volvemos a esta actividad reiniciamos la conexión de tal forma que se vuelven a recibir
