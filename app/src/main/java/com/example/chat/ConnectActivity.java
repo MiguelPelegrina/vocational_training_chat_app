@@ -67,8 +67,6 @@ public class ConnectActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Intent i = new Intent(ConnectActivity.this, ChatActivity.class);
-                            // Cerramos el socket
-                            //connection.closeSocket();
                             // Pasamos la información del mensaje mandado
                             i.putExtra("nombre", txtName.getText().toString());
                             i.putExtra("ip", txtIpOther.getText().toString());
